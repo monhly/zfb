@@ -7,7 +7,9 @@ import Home from "./pages/home"
 // 导入地图找房组件
 import Map from './pages/map'
 //导入城市的页面
-import CityList from"./pages/cityList"
+import CityList from "./pages/cityList"
+// 导入404组件
+import  NotFind  from "./pages/404";
 function App() {
   return (
 
@@ -18,9 +20,12 @@ function App() {
         <Link to="/map"> nihao</Link>
       </div>
       {/* 使用router包裹路由 */}
-      <Route path="/home" component={Home}></Route>
-      <Route path="/city" component={CityList}></Route>
-      <Route path="/map" component={Map}></Route>
+      <Switch>
+        <Route path="/home" component={Home}></Route>
+        <Route path="/city" component={CityList}></Route>
+        <Route path="/map" component={Map}></Route>
+        <Route component={NotFind}></Route>
+     </Switch>
     </Router>
   );
 }
