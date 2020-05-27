@@ -1,7 +1,7 @@
 import React from 'react';
 
 // 导入路由的组件
-import { BrowserRouter as Router, Route, Link, Switch } from "react-router-dom"
+import { BrowserRouter as Router, Route, Link, Switch ,Redirect} from "react-router-dom"
 //首页组件
 import Home from "./pages/home"
 // 导入地图找房组件
@@ -21,6 +21,8 @@ function App() {
       </div>
       {/* 使用router包裹路由 */}
       <Switch>
+        {/* 重定向组件 */}
+        <Redirect exact from="/" to="/home" />
         <Route path="/home" component={Home}></Route>
         <Route path="/city" component={CityList}></Route>
         <Route path="/map" component={Map}></Route>
