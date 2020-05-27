@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
-// import 'antd-mobile/dist/antd-mobile.css'
+// 导入路由
 ReactDOM.render(
   <React.StrictMode>
     <App />
