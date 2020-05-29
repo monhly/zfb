@@ -142,7 +142,7 @@ export default class HomeIndex extends Component {
             <div className="search">
            <Flex justify="around" className="topNav">
                     <div className="searchBox">
-                    <div className="city">
+                    <div className="city" onClick={()=>{this.props.history.push('/city')}}>
                         北京<i className="iconfont icon-arrow" />
                     </div>
                     <SearchBar
