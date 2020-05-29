@@ -9,3 +9,11 @@ export function  getLunbo () {
         })
 
 }
+/**
+ * 获取租房小组
+ */
+export function getZuFang (place) {
+    return axios({
+        url:'home/groups?area='+place
+    })
+}

@@ -62,7 +62,7 @@ export default class Home extends Component {
   }
   render () {
       return (
-            <div>
+            <div className={'homeIndex'}>
                {this.TabMsg()}
                 {/* 我是首页 */}
                 {/* 设置二级路由 */}

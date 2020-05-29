@@ -1,11 +1,12 @@
 import React, { Component } from 'react'
 // 导入轮播图的组件
-import { Carousel ,Flex} from 'antd-mobile';
+import { Carousel ,Flex,Grid} from 'antd-mobile';
 //导入axios组件
-import { getLunbo } from "../../request/home"
+import { getLunbo, getZuFang } from "../../request/home"
+// 图片根路径
 import { baseurl } from "../../utils/axios"
 // 导入样式
-import "./index.css"
+import "./index.scss"
 // 导入数据
 import navArr from"../../utils/navList"
 export default class HomeIndex extends Component {
@@ -13,14 +14,18 @@ export default class HomeIndex extends Component {
         data: [],
         imgHeight: 176,
         // 轮播图的状态
-        statusLunBo:false
+        statusLunBo: false,
+        // 地点的信息
+        place: '',
+        // 租房小组的数据
+        ZuFArr:[]
     }
     // 获取轮播请求
    async getLB () {
-       const { description, status, body } = await getLunbo()
+       const {  status, body } = await getLunbo()
        //判断此时获取的数据状态
        if (status === 200) {
-        console.log(description, status, body);
+
         // 修改数据
            this.setState({
                data:[...body]
@@ -37,9 +42,14 @@ export default class HomeIndex extends Component {
     // 组件渲染完成以后
     componentDidMount() {
         // simulate img loading
-        // 获取请求
+        // 获取轮播图请求
         this.getLB()
-        console.log(baseurl);
+        //获取租房小组的数据
+        this.getZuF()
+        this.props.history.listen((data) => {
+            console.log('路由变化了',data);
+
+        })
     }
     // 轮播图的数据
     lunBo () {
@@ -72,21 +82,16 @@ export default class HomeIndex extends Component {
 
         )
     }
+    // 导航栏
     Nav () {
         return (
             <div>
                 <Flex className="nav">
                     {
-
-                            //    <Flex.Item  key={i.id}>
-                            //     <img src={i.img} alt=""/>
-                            //     <p>{i.title}</p>
-                            //     </Flex.Item>
-
                         navArr.map(i => {
                             return (
                             <Flex.Item  key={i.id}>
-                                 <img src={i.img} alt=""/>
+                                 <img src={i.img} onClick={()=>{this.props.history.push(i.path)}} alt=""/>
                                  <p>{i.title}</p>
                             </Flex.Item>
                             )
@@ -96,6 +101,49 @@ export default class HomeIndex extends Component {
             </div>
         )
     }
+    // 更多的组件
+    More () {
+      return(
+        <div className="group">
+            <Flex className="group-title" justify="between">
+            <h3>租房小组</h3>
+            <span>更多</span>
+            </Flex>
+              {/* 租房内容 */}
+              <Grid
+                    data={this.state.ZuFArr}
+                    columnNum={2}
+                    hasLine={false}
+                    square={false}
+                    renderItem={item => (
+                    <div style={{  }}>
+                            {/* 使用flex */}
+                            <Flex className="grid-item" justify="between">
+                            <div className="desc">
+                                    <h3>{item.title}</h3>
+                                    <p>{item.desc}</p>
+                            </div>
+                            <img src={baseurl+item.imgSrc} alt="" />
+                            </Flex>
+                    </div>
+                    )}
+                    />
+        </div>
+      )
+    }
+    //获取租房小组的信息
+   async getZuF () {
+        const {status,body} = await getZuFang('AREA|88cff55c-aaa4-e2e0')
+       if (status === 200) {
+           this.setState({
+               ZuFArr: [...body]
+
+           })
+           console.log(status,body);
+
+        }
+
+    }
     render() {
         return (
             <div>
@@ -104,6 +152,9 @@ export default class HomeIndex extends Component {
                     {this.lunBo()}
                     {/* 导航栏的数据 */}
                     {this.Nav()}
+                    {/* 更多的组件 */}
+                    {this.More()}
+
                 </div>
          </div>
         )
