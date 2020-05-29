@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 // 导入轮播图的组件
-import { Carousel ,Flex,Grid} from 'antd-mobile';
+import { Carousel ,Flex,Grid,WingBlank} from 'antd-mobile';
 //导入axios组件
-import { getLunbo, getZuFang } from "../../request/home"
+import { getLunbo, getZuFang,getHotMsg } from "../../request/home"
 // 图片根路径
 import { baseurl } from "../../utils/axios"
 // 导入样式
@@ -18,7 +18,9 @@ export default class HomeIndex extends Component {
         // 地点的信息
         place: '',
         // 租房小组的数据
-        ZuFArr:[]
+        ZuFArr: [],
+        //最新资讯的区域
+        hotArr:[]
     }
     // 获取轮播请求
    async getLB () {
@@ -46,11 +48,12 @@ export default class HomeIndex extends Component {
         this.getLB()
         //获取租房小组的数据
         this.getZuF()
-        this.props.history.listen((data) => {
-            console.log('路由变化了',data);
-
-        })
+        //获取热门新闻的数据
+        this.getHotMsg()
     }
+
+
+
     // 轮播图的数据
     lunBo () {
         return (
@@ -139,9 +142,47 @@ export default class HomeIndex extends Component {
                ZuFArr: [...body]
 
            })
-           console.log(status,body);
-
         }
+
+    }
+    // 热门资讯的区域
+    HotNews () {
+        return (
+            <div className="news">
+            <h3 className="group-title">最新资讯</h3>
+                <WingBlank size="md">
+                    {
+                              this.state.hotArr.map(item => (
+                                <div className="news-item" key={item.id}>
+                                  <div className="imgwrap">
+                                    <img
+                                      className="img"
+                                      src={baseurl+item.imgSrc}
+                                      alt=""
+                                    />
+                                  </div>
+                                  <Flex className="content" direction="column" justify="between">
+                                    <h3 className="title">{item.title}</h3>
+                                    <Flex className="info" justify="between">
+                                      <span>{item.from}</span>
+                                      <span>{item.date}</span>
+                                    </Flex>
+                                  </Flex>
+                                </div>
+                              ))
+                    }
+                </WingBlank>
+            </div>
+        )
+    }
+    //获取热门咨询的信息
+    async getHotMsg () {
+        const {status,body} = await getHotMsg('AREA|88cff55c-aaa4-e2e0')
+        if (status === 200) {
+            this.setState({
+               hotArr:body
+           })
+       }
 
     }
     render() {
@@ -152,9 +193,10 @@ export default class HomeIndex extends Component {
                     {this.lunBo()}
                     {/* 导航栏的数据 */}
                     {this.Nav()}
-                    {/* 更多的组件 */}
+                    {/* 租房小组的组件 */}
                     {this.More()}
-
+                    {/* 最新资讯 */}
+                    {this.HotNews()}
                 </div>
          </div>
         )

@@ -17,3 +17,9 @@ export function getZuFang (place) {
         url:'home/groups?area='+place
     })
 }
+// 获取热门推荐的信息
+export function getHotMsg (id) {
+    return axios({
+        url:'home/news?area='+id
+    })
+}

@@ -1,10 +1,9 @@
-.homeIndex{
-    padding-bottom: 50px;
-}
+
 .buttons{
     position: fixed;
     width: 100%;
     bottom:0 ;
+    left: 0;
     z-index: 111;
 }
 .buttons .iconfont{
