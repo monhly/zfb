@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 // 导入轮播图的组件
-import { Carousel ,Flex,Grid,WingBlank} from 'antd-mobile';
+import { Carousel ,Flex,Grid,WingBlank,SearchBar} from 'antd-mobile';
 //导入axios组件
 import { getLunbo, getZuFang,getHotMsg } from "../../request/home"
 // 图片根路径
@@ -11,6 +11,8 @@ import "./index.scss"
 import navArr from"../../utils/navList"
 export default class HomeIndex extends Component {
     state = {
+        // 搜索框的值
+        keyword:'',
         //轮播图的数据
         data: [],
         imgHeight: 176,
@@ -134,7 +136,29 @@ export default class HomeIndex extends Component {
             </div>
         )
     }
+    // 顶部搜索的区域
+    Search () {
+        return (
+            <div className="search">
+           <Flex justify="around" className="topNav">
+                    <div className="searchBox">
+                    <div className="city">
+                        北京<i className="iconfont icon-arrow" />
+                    </div>
+                    <SearchBar
+                        value={this.state.keyword}
 
+                        onChange={(v) => this.setState({ keyword: v })}
+                        placeholder="请输入小区或地址"
+                    />
+                    </div>
+                    <div className="map">
+                    <i key="0" className="iconfont icon-map" />
+                    </div>
+                </Flex>
+            </div>
+        )
+    }
      // 组件渲染完成以后
     async componentDidMount() {
     //    使用promise.all进行数据请求的重构
@@ -151,8 +175,11 @@ export default class HomeIndex extends Component {
         if (data[0].status === 200) {
             // 进行赋值
             this.setState({
+                // 轮播图的数据
                 data: data[0].body,
+                // 租房小组的信息
                 ZuFArr: data[1].body,
+                // 最新咨询的信息
                 hotArr:data[2].body
             })
         }
@@ -162,6 +189,8 @@ export default class HomeIndex extends Component {
         return (
             <div>
                 <div className="header">
+                    {/* 搜索区域 */}
+                    {this.Search()}
                     {/* 轮播图的数据 */}
                     {this.lunBo()}
                     {/* 导航栏的数据 */}
