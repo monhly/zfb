@@ -11,6 +11,7 @@ import "./index.scss"
 import navArr from"../../utils/navList"
 export default class HomeIndex extends Component {
     state = {
+        //轮播图的数据
         data: [],
         imgHeight: 176,
         // 轮播图的状态
@@ -22,38 +23,6 @@ export default class HomeIndex extends Component {
         //最新资讯的区域
         hotArr:[]
     }
-    // 获取轮播请求
-   async getLB () {
-       const {  status, body } = await getLunbo()
-       //判断此时获取的数据状态
-       if (status === 200) {
-
-        // 修改数据
-           this.setState({
-               data:[...body]
-           }, () => {
-                //    修改自动播放的状态:
-
-                   this.setState({
-                       statusLunBo:true
-                   })
-           })
-     }
-
-    }
-    // 组件渲染完成以后
-    componentDidMount() {
-        // simulate img loading
-        // 获取轮播图请求
-        this.getLB()
-        //获取租房小组的数据
-        this.getZuF()
-        //获取热门新闻的数据
-        this.getHotMsg()
-    }
-
-
-
     // 轮播图的数据
     lunBo () {
         return (
@@ -134,17 +103,7 @@ export default class HomeIndex extends Component {
         </div>
       )
     }
-    //获取租房小组的信息
-   async getZuF () {
-        const {status,body} = await getZuFang('AREA|88cff55c-aaa4-e2e0')
-       if (status === 200) {
-           this.setState({
-               ZuFArr: [...body]
 
-           })
-        }
-
-    }
     // 热门资讯的区域
     HotNews () {
         return (
@@ -175,14 +134,28 @@ export default class HomeIndex extends Component {
             </div>
         )
     }
-    //获取热门咨询的信息
-    async getHotMsg () {
-        const {status,body} = await getHotMsg('AREA|88cff55c-aaa4-e2e0')
-        if (status === 200) {
+
+     // 组件渲染完成以后
+    async componentDidMount() {
+    //    使用promise.all进行数据请求的重构
+         const data=await Promise.all([ // simulate img loading
+            // 获取轮播图请求
+             getLunbo(),
+               //获取租房小组的数据
+             getZuFang('AREA|88cff55c-aaa4-e2e08787878'),
+            //获取热门新闻的数据
+            getHotMsg('AREA|88cff55c-aaa4-e2e0'),
+
+         ])
+        //对数据进行判断,若此时出现错误,则返回的数据就不是200
+        if (data[0].status === 200) {
+            // 进行赋值
             this.setState({
-               hotArr:body
-           })
-       }
+                data: data[0].body,
+                ZuFArr: data[1].body,
+                hotArr:data[2].body
+            })
+        }
 
     }
     render() {
