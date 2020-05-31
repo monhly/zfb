@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { NavBar, Icon } from 'antd-mobile'
+import { NavBar, Icon, Toast } from 'antd-mobile'
 import { getCity, getHotCity } from "../../request/city"
 // 导入自适应的列表
 import { AutoSizer, List } from 'react-virtualized'
@@ -80,16 +80,32 @@ export default class CityList extends Component {
        const { cityObj,indexItem } = this.state
         // 获取归类的首字母
        const title = indexItem[index]
-    //    获取首字母的数据
+        // 获取首字母的数据
          const msgList=cityObj[title]
         return (
           <div key={key} style={style} className="city-item">
                 <div className="title">{this.trunTitle(title)}</div>
                 {/* 遍历首字母的数据 */}
-                {msgList.map(i=> <div className="name" key={i.value}>{i.label}</div>)}
+                {msgList.map(i=> <div className="name" onClick={()=>{this.sendMsg(i)}} key={i.value}>{i.label}</div>)}
 
           </div>
         )
+    }
+    //点击城市进行切换
+    sendMsg (i) {
+        console.log(i);
+        // 定义有数据的城市
+        const hasCity = ['北京', '上海', '广州', '深圳']
+        // 如果此时是有房源信息的城市i
+        if (hasCity.includes(i.label)) {
+            // 保存数据
+            JSON.stringify(window.localStorage.setItem('city',i))
+            // 进行页面的跳转
+            this.props.history.goBack()
+        } else {
+            // 如此时不是房源的城市
+            Toast.fail('暂无房源的信息 !!!', 1);
+        }
     }
     // 对title的数据进行改变
     trunTitle (data) {
