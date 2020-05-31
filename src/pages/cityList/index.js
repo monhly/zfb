@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { NavBar, Icon } from 'antd-mobile'
-import {getCity} from "../../request/city"
+import { getCity, getHotCity } from "../../request/city"
+
 export default class CityList extends Component {
     //头部导航的组件
     Nav () {
@@ -17,18 +18,16 @@ export default class CityList extends Component {
     // 获取城市列表的数据
     async getCityMsg () {
         const data = await getCity(1)
-
         // 定义对象保存数据
-       this.modifyData(data)
-
+        const {cityObj ,indexItem}= await this.modifyData(data)
+        console.log(cityObj ,indexItem);
     }
     // 手动修改返回的数据
-    modifyData (data) {
+   async modifyData (data) {
         // 保存城市的变量
         let cityObj = {}
         let indexItem = []
         //保存城市的键值
-
         if (data.status === 200) {
             // 此时对请求的数据进行判断
             data.body.forEach(item => {
@@ -46,16 +45,26 @@ export default class CityList extends Component {
                 }
             });
             indexItem=Object.keys(cityObj).sort()
-            console.log(indexItem);
+            //获取热门城市
+            const {status,body} = await getHotCity()
+            if (status === 200) {
+                // 将hot数据添加到对象里面
+                cityObj['hot'] = body
+                // 添加hot索引
+                indexItem.unshift('hot')
 
-
+            }
+            return { cityObj, indexItem }
         }
+
     }
     componentDidMount () {
-        // 获取数据
+        // 获取城市的数据
         this.getCityMsg()
+
     }
-    render() {
+    render () {
+
         return (
             <div>
                 {/* 头部的导航区域 */}

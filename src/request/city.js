@@ -8,3 +8,8 @@ export function  getCity (place) {
             url:'area/city?level='+place
         })
 }
+export function getHotCity () {
+    return axios({
+        url:"area/hot"
+    })
+}
