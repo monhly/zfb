@@ -1,8 +1,16 @@
 import React, { Component } from 'react'
 import { NavBar, Icon } from 'antd-mobile'
 import { getCity, getHotCity } from "../../request/city"
-
+// 导入自适应的列表
+import { AutoSizer, List } from 'react-virtualized'
+//导入样式
+import"./index.scss"
+// const list = Array.from(new Array(100)).map((item,index) => index);
 export default class CityList extends Component {
+    state = {
+        cityObj: {},
+        indexItem:[]
+    }
     //头部导航的组件
     Nav () {
         return (
@@ -20,7 +28,11 @@ export default class CityList extends Component {
         const data = await getCity(1)
         // 定义对象保存数据
         const {cityObj ,indexItem}= await this.modifyData(data)
-        console.log(cityObj ,indexItem);
+        // 修改数据
+        this.setState({
+            cityObj,
+            indexItem
+        })
     }
     // 手动修改返回的数据
    async modifyData (data) {
@@ -58,6 +70,36 @@ export default class CityList extends Component {
         }
 
     }
+   rowRenderer=({
+        key, // Unique key within array of rows
+        index, // Index of row within collection
+        isScrolling, // The List is currently being scrolled
+        isVisible, // This row is visible within the List (eg it is not an overscanned row)
+        style // Style object to be applied to row (to position it)
+   }) => {
+       const { cityObj,indexItem } = this.state
+        // 获取归类的首字母
+       const title = indexItem[index]
+    //    获取首字母的数据
+         const msgList=cityObj[title]
+        return (
+          <div key={key} style={style} className="city-item">
+                <div className="title">{this.trunTitle(title)}</div>
+                {/* 遍历首字母的数据 */}
+                {msgList.map(i=> <div className="name" key={i.value}>{i.label}</div>)}
+
+          </div>
+        )
+    }
+    // 对title的数据进行改变
+    trunTitle (data) {
+        if (data === 'hot') {
+            return data='热门城市'
+        } else {
+            return data.toUpperCase()
+        }
+    }
+    // 组件渲染完成后的钩子函数
     componentDidMount () {
         // 获取城市的数据
         this.getCityMsg()
@@ -66,9 +108,33 @@ export default class CityList extends Component {
     render () {
 
         return (
-            <div>
+            <div className="listCitys">
                 {/* 头部的导航区域 */}
-               { this.Nav()}
+                {this.Nav()}
+                <AutoSizer>
+                {({ height, width }) => (
+                  <List
+                  height={height}
+                  rowCount={this.state.indexItem.length}
+                            rowHeight={(obj) => {
+                                // 返回的是每个值的索引
+                                // 获取每个索引的长度,根据长度自定义高度
+                                const { cityObj, indexItem } = this.state
+                                // 获取首字母数组的数量
+                                const lengths = cityObj[indexItem[obj.index]]
+                                // 根据数组长度计算高度
+                               const heightLine=lengths.length*50+36
+                                return heightLine
+
+                  }}
+                  rowRenderer={this.rowRenderer}
+                   width={width}
+                    className="city-item"
+                  />
+                  )}
+                </AutoSizer>
+
+
             </div>
         )
     }
