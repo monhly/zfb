@@ -108,12 +108,28 @@ export default class CityList extends Component {
         }
     }
     // 对title的数据进行改变
-    trunTitle (data) {
+    trunTitle (data,status) {
         if (data === 'hot') {
-            return data='热门城市'
+            return status?'热':'热门城市'
         } else {
             return data.toUpperCase()
         }
+    }
+    // 渲染右侧的数据
+    renderCityIndex () {
+        const {indexItem}=this.state
+        return indexItem.map((item, index) => {
+            return (
+              <li
+                key={item}
+                className="city-index-item"
+              >
+                <span className={0 === index ? 'index-active' : ''}>
+                  {this.trunTitle(item,true)}
+                </span>
+              </li>
+            )
+          })
     }
     // 组件渲染完成后的钩子函数
     componentDidMount () {
@@ -127,6 +143,7 @@ export default class CityList extends Component {
             <div className="listCitys">
                 {/* 头部的导航区域 */}
                 {this.Nav()}
+                {/* 城市列表的区域 */}
                 <AutoSizer>
                 {({ height, width }) => (
                   <List
@@ -149,7 +166,11 @@ export default class CityList extends Component {
                   />
                   )}
                 </AutoSizer>
-
+                {/* 右侧导航的区域 */}
+                 {/* 右侧索引列表 */}
+                <ul className="city-index">
+                {this.renderCityIndex()}
+                </ul>
 
             </div>
         )

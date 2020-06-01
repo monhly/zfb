@@ -8,6 +8,9 @@ export function  getCity (place) {
             url:'area/city?level='+place
         })
 }
+/**
+ * 获取热门城市的数据
+ */
 export function getHotCity () {
     return axios({
         url:"area/hot"
