@@ -147,12 +147,17 @@ export default class CityList extends Component {
         })
     }
     // 页面滚动是获取的索引
-    renderState =(obj)=> {
-        console.log(obj);
+    renderState =({startIndex})=> {
+
         // 获取当前滚动区域的索引进行赋值
-        this.setState({
-            activeIndex:obj.startIndex
-        })
+        // 进行优化
+        if (startIndex !== this.state.indexItem) {
+            console.log(startIndex);
+            // 判断是否在当前的索引范围内,是的话就不用了重复修改属性
+            this.setState({
+                activeIndex:startIndex
+            })
+        }
 
     }
     // 组件渲染完成后的钩子函数
