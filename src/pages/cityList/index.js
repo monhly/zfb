@@ -7,9 +7,12 @@ import { AutoSizer, List } from 'react-virtualized'
 import"./index.scss"
 // const list = Array.from(new Array(100)).map((item,index) => index);
 export default class CityList extends Component {
+    listRef = React.createRef();
     state = {
         cityObj: {},
-        indexItem:[]
+        indexItem: [],
+        // 右侧索引
+        activeIndex:0
     }
     //头部导航的组件
     Nav () {
@@ -122,14 +125,26 @@ export default class CityList extends Component {
             return (
               <li
                 key={item}
-                className="city-index-item"
+                    className="city-index-item"
+                    onClick={()=>{this.targetIndex(index)}}
               >
-                <span className={0 === index ? 'index-active' : ''}>
+                <span className={this.state.activeIndex=== index ? 'index-active' : ''}>
                   {this.trunTitle(item,true)}
                 </span>
               </li>
             )
           })
+    }
+    // 点击对应的首字母跳转到对应的目录
+    targetIndex=(index) => {
+        console.log(this.listRef.current)
+        // 点击右侧导航位置左侧到达指定位置
+        // 调用这个方法传入对应的参数，进而跳转到指定的位置
+        this.listRef.current.scrollToRow(index)
+        // 获取对应的索引修改索引
+        this.setState({
+            activeIndex:index
+        })
     }
     // 组件渲染完成后的钩子函数
     componentDidMount () {
@@ -146,10 +161,12 @@ export default class CityList extends Component {
                 {/* 城市列表的区域 */}
                 <AutoSizer>
                 {({ height, width }) => (
-                  <List
-                  height={height}
+                        <List
+                   ref={this.listRef}
+                            height={height}
+                            scrollToAlignment='start'
                   rowCount={this.state.indexItem.length}
-                            rowHeight={(obj) => {
+                   rowHeight={(obj) => {
                                 // 返回的是每个值的索引
                                 // 获取每个索引的长度,根据长度自定义高度
                                 const { cityObj, indexItem } = this.state
@@ -167,7 +184,6 @@ export default class CityList extends Component {
                   )}
                 </AutoSizer>
                 {/* 右侧导航的区域 */}
-                 {/* 右侧索引列表 */}
                 <ul className="city-index">
                 {this.renderCityIndex()}
                 </ul>
