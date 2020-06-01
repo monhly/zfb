@@ -146,6 +146,15 @@ export default class CityList extends Component {
             activeIndex:index
         })
     }
+    // 页面滚动是获取的索引
+    renderState =(obj)=> {
+        console.log(obj);
+        // 获取当前滚动区域的索引进行赋值
+        this.setState({
+            activeIndex:obj.startIndex
+        })
+
+    }
     // 组件渲染完成后的钩子函数
     componentDidMount () {
         // 获取城市的数据
@@ -163,20 +172,21 @@ export default class CityList extends Component {
                 {({ height, width }) => (
                         <List
                    ref={this.listRef}
-                            height={height}
-                            scrollToAlignment='start'
+                    height={height}
+                    scrollToAlignment='start'
                   rowCount={this.state.indexItem.length}
                    rowHeight={(obj) => {
-                                // 返回的是每个值的索引
-                                // 获取每个索引的长度,根据长度自定义高度
-                                const { cityObj, indexItem } = this.state
-                                // 获取首字母数组的数量
-                                const lengths = cityObj[indexItem[obj.index]]
-                                // 根据数组长度计算高度
-                               const heightLine=lengths.length*50+36
-                                return heightLine
+                     // 返回的是每个值的索引
+                     // 获取每个索引的长度,根据长度自定义高度
+                     const { cityObj, indexItem } = this.state
+                     // 获取首字母数组的数量
+                     const lengths = cityObj[indexItem[obj.index]]
+                     // 根据数组长度计算高度
+                    const heightLine=lengths.length*50+36
+                     return heightLine
 
                   }}
+                  onRowsRendered={this.renderState}
                   rowRenderer={this.rowRenderer}
                    width={width}
                     className="city-item"
