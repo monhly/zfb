@@ -11,13 +11,15 @@ const titleList = [
   { title: '租金', type: 'price' },
   { title: '筛选', type: 'more' }
 ]
-const renderTitle = function() {
+const renderTitle = function (props) {
+// 结构props
+const {selectedMenu,modifyTitle}=props
   return (
     titleList.map(i => {
       return (
-        <Flex.Item key={i.type}>
+        <Flex.Item key={i.type} onClick={()=>{modifyTitle(i.type)}}>
         {/* 选中类名： selected */}
-          <span className={[styles.dropdown, styles.selected].join(' ')}>
+          <span className={[styles.dropdown,selectedMenu[i.type]? styles.selected:''].join(' ')}>
             <span>{i.title}</span>
           <i className="iconfont icon-arrow" />
           </span>
@@ -26,12 +28,12 @@ const renderTitle = function() {
     })
   )
 }
-export default function FilterTitle () {
+export default function FilterTitle (props) {
 
   return (
     <Flex align="center" className={styles.root}>
       {/* 调用函数 */}
-      {renderTitle()}
+      {renderTitle(props)}
     </Flex>
   )
 }
