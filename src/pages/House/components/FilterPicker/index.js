@@ -89,16 +89,24 @@ const province = [
 
 export default class FilterPicker extends Component {
 
-
+  state = {
+    val:''
+  }
   render () {
      // 结构传入的props
     const { onOk, onCancle, data ,col} = this.props
     console.log(data);
+    const {val}=this.state
+    console.log(val);
 
     return (
       <>
         {/* 选择器组件： */}
-        <PickerView data={data} value={null} cols={col||1} />
+        <PickerView data={data} value={val} cols={col || 1} onChange={(val) => {
+          this.setState({
+            val:val
+          })
+        }}/>
 
         {/* 底部按钮 */}
         <FilterFooter onOK={onOk} onCancle={onCancle} />
