@@ -101,7 +101,7 @@ export default class CityList extends Component {
         // 如果此时是有房源信息的城市i
         if (hasCity.includes(i.label)) {
             // 保存数据
-            JSON.stringify(window.localStorage.setItem('city',i))
+           window.localStorage.setItem('city',JSON.stringify(i))
             // 进行页面的跳转
             this.props.history.goBack()
         } else {

@@ -17,11 +17,11 @@ const {selectedMenu,modifyTitle}=props
   return (
     titleList.map(i => {
       return (
-        <Flex.Item key={i.type} onClick={()=>{modifyTitle(i.type)}}>
+        <Flex.Item key={i.type}>
         {/* 选中类名： selected */}
-          <span className={[styles.dropdown,selectedMenu[i.type]? styles.selected:''].join(' ')}>
+          <span  onClick={()=>{modifyTitle(i.type)}} className={[styles.dropdown,selectedMenu[i.type]? styles.selected:''].join(' ')}>
             <span>{i.title}</span>
-          <i className="iconfont icon-arrow" />
+            <i className="iconfont icon-arrow" />
           </span>
        </Flex.Item>
       )
