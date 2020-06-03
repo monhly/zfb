@@ -96,7 +96,6 @@ export default class CityList extends Component {
     }
     //点击城市进行切换
     sendMsg (i) {
-        console.log(i);
         // 定义有数据的城市
         const hasCity = ['北京', '上海', '广州', '深圳']
         // 如果此时是有房源信息的城市i
