@@ -16,20 +16,32 @@ const selectedMenus = {
 export default class Filter extends Component {
   state = {
     // 定义当前选中区域的对象
-    selectedMenu:{...selectedMenus}
+    selectedMenu: { ...selectedMenus },
+    // 定义一个变量保存当前的数据
+    currentProps:''
   }
   // 定义一个函数实现传父
   modifyTitle= (type)=>{
     // 修改数据的布尔值,根据传入的属性进行修改
     this.setState({
-      selectedMenu:{...selectedMenus,[type]:true}
+      selectedMenu: { ...selectedMenus, [type]: true },
+      currentProps:type
     })
+  }
+  // 定义一个方法,判断当前点击的是哪些属性
+  centifyMsg () {
+    const { currentProps } = this.state
+    if (currentProps !== "more"&&currentProps!=='') {
+      return true
+    }
+    // 如果是第四个就是false
+    return false
   }
   render() {
     return (
       <div className={styles.root}>
         {/* 前三个菜单的遮罩层 */}
-        {/* <div className={styles.mask} /> */}
+      {this.centifyMsg()?<div className={styles.mask} />:null}
 
         <div className={styles.content}>
           {/* 标题栏 */}
@@ -37,7 +49,7 @@ export default class Filter extends Component {
           <FilterTitle modifyTitle={this.modifyTitle}  selectedMenu={this.state.selectedMenu}/>
 
           {/* 前三个菜单对应的内容： */}
-          {/* <FilterPicker /> */}
+         {this.centifyMsg()? <FilterPicker />:null}
           {/* 最后一个菜单对应的内容： */}
           {/* <FilterMore /> */}
         </div>
