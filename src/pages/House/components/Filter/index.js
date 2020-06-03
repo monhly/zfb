@@ -14,19 +14,13 @@ const selectedMenusd = {
   price:false,
   more:false ,
 }
-// 定义一个变量自定义初始时候的筛选条件
-let selectedIndex = {
-  area:["area", "null"] ,
-  mode:['null'] ,
-  price:['null'],
-  more:[] ,
-}
+
 export default class Filter extends Component {
   state = {
     // 定义当前选中区域的对象
     selectedMenu: { ...selectedMenusd },
     // 定义一个变量保存当前的数据
-    currentProps:''
+    currentProps: ''
   }
   // 获取筛选条件的请求
   async getHouses () {
@@ -43,6 +37,13 @@ export default class Filter extends Component {
   }
   componentDidMount () {
     this.getHouses()
+     // 定义一个变量自定义初始时候的筛选条件
+    this.selectedIndex = {
+      area:["area", "null"] ,
+      mode:['null'] ,
+      price:['null'],
+      more:[] ,
+    }
   }
 
   // 定义一个函数实现传父
@@ -70,7 +71,7 @@ export default class Filter extends Component {
       // 传入对应的列数
       let col = null
       // 定义一个变量传给输入的value值
-      let val= selectedIndex[currentProps]
+      let val= this.selectedIndex[currentProps]
       const { area,subway ,rentType,price} = this.filter
       // 根据所选的type值传入对应的数据
       switch (currentProps) {
@@ -88,7 +89,7 @@ export default class Filter extends Component {
         default:
           break
       }
-      return  <FilterPicker val={val} col={col} data={data} onCancle={this.onModify} onOk={this.onOk}/>
+      return  <FilterPicker key={currentProps} val={val} col={col} data={data} onCancle={this.onModify} onOk={this.onOk}/>
     }
     return null
   }
@@ -105,13 +106,13 @@ export default class Filter extends Component {
     })
     console.log(val);
     // 修改传入的值
-    selectedIndex[this.state.currentProps]=val
+    this.selectedIndex[this.state.currentProps]=val
   }
 
 
 
   render () {
-    const {currentProps}=this.state
+
     return (
       <div className={styles.root}>
         {/* 前三个菜单的遮罩层 */}
@@ -122,7 +123,7 @@ export default class Filter extends Component {
         <div className={styles.content}>
           {/* 标题栏 */}
           {/* 父子之间进行传值 */}
-          <FilterTitle  modifyTitle={this.modifyTitle} selectedMenu={this.state.selectedMenu}/>
+          <FilterTitle   modifyTitle={this.modifyTitle} selectedMenu={this.state.selectedMenu}/>
 
           {/* 前三个菜单对应的内容： */}
           {this.renderContent()}
