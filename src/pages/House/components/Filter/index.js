@@ -14,6 +14,13 @@ const selectedMenusd = {
   price:false,
   more:false ,
 }
+// 定义一个变量自定义初始时候的筛选条件
+let selectedIndex = {
+  area:["area", "null"] ,
+  mode:['null'] ,
+  price:['null'],
+  more:[] ,
+}
 export default class Filter extends Component {
   state = {
     // 定义当前选中区域的对象
@@ -58,16 +65,19 @@ export default class Filter extends Component {
     if (this.isShow()) {
 
       const { currentProps } = this.state
-          // 定义一个变量传值给子组件
+      // 定义一个渲染的内容传值给子组件
       let data = null
       // 传入对应的列数
-      let col=null
+      let col = null
+      // 定义一个变量传给输入的value值
+      let val= selectedIndex[currentProps]
       const { area,subway ,rentType,price} = this.filter
       // 根据所选的type值传入对应的数据
       switch (currentProps) {
         case 'area':
           data = [area, subway]
-            col=3
+          col = 3
+
           break
         case 'mode':
           data = rentType
@@ -78,7 +88,7 @@ export default class Filter extends Component {
         default:
           break
       }
-      return  <FilterPicker col={col} data={data} onCancle={this.onModify} onOk={this.onOk}/>
+      return  <FilterPicker val={val} col={col} data={data} onCancle={this.onModify} onOk={this.onOk}/>
     }
     return null
   }
@@ -89,15 +99,19 @@ export default class Filter extends Component {
     })
   }
   // 点击确定关闭蒙层
-  onOk = () => {
+  onOk = (val) => {
     this.setState({
       currentProps:''
     })
+    console.log(val);
+    // 修改传入的值
+    selectedIndex[this.state.currentProps]=val
   }
 
 
 
-  render() {
+  render () {
+    const {currentProps}=this.state
     return (
       <div className={styles.root}>
         {/* 前三个菜单的遮罩层 */}
@@ -108,7 +122,7 @@ export default class Filter extends Component {
         <div className={styles.content}>
           {/* 标题栏 */}
           {/* 父子之间进行传值 */}
-          <FilterTitle modifyTitle={this.modifyTitle} selectedMenu={this.state.selectedMenu}/>
+          <FilterTitle  modifyTitle={this.modifyTitle} selectedMenu={this.state.selectedMenu}/>
 
           {/* 前三个菜单对应的内容： */}
           {this.renderContent()}
