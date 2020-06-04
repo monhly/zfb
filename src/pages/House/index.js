@@ -80,7 +80,11 @@ export default class HouseList extends React.Component {
     const item = list[index];
     // 如果没有数据此时就返回null
     if (!item) {
-      return null
+      return (
+        <div style={style} key={key}>
+          <p className={styles.loading}></p>
+        </div>
+      )
     }
      // 处理图片传递的key
      item.src = `${baseurl}${item.houseImg}`
