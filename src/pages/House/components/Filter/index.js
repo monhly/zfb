@@ -4,7 +4,7 @@ import FilterTitle from '../FilterTitle'
 import FilterPicker from '../FilterPicker'
 import FilterMore from '../FilterMore'
 // 获取axios的请求
-import {getHouse} from"../../../../request/house"
+import {getHouse,getHouseList} from"../../../../request/house"
 import styles from './index.module.css'
 
 // 定义选中菜单的类型
@@ -22,6 +22,13 @@ export default class Filter extends Component {
     // 定义一个变量保存当前的数据
     currentProps: ''
   }
+  // 定义一个变量自定义初始时候的筛选条件
+  selectedIndex = {
+    area:["area", "null"] ,
+    mode:['null'] ,
+    price:['null'],
+    more:[] ,
+  }
   // 获取筛选条件的请求
   async getHouses () {
     // 获取本地的value值
@@ -38,13 +45,7 @@ export default class Filter extends Component {
   }
   componentDidMount () {
     this.getHouses()
-     // 定义一个变量自定义初始时候的筛选条件
-    this.selectedIndex = {
-      area:["area", "null"] ,
-      mode:['null'] ,
-      price:['null'],
-      more:[] ,
-    }
+
   }
 
   // 定义一个函数实现传父
@@ -120,6 +121,44 @@ export default class Filter extends Component {
     })
     return newTitleSele
   }
+  // 根据当前选中的筛选条件进行处理
+  handelFilters (selectedValues) {
+    // 对获取的筛选数据进行结构
+    const { area, mode, price, more } = selectedValues;
+    // 重新定义一个变量对数据进行接收
+    const filters = {}
+    // 对地区的数据进行结构
+    let areaKey = area[0], aval;
+    // 如果获取的地区数据的长度是2
+    if (area.length === 2) {
+      // 此时就将获取的第二个值赋值给变量
+      aval = area[1]
+    } else {
+      // 如果此时数组的长度大于2
+      // 判断第三个变量
+      if (area[2] !== 'null') {
+        // 如果不是第三个值不是null则说明有值
+        aval=area[2]
+      } else {
+        // 如果第三个是是null
+        // 则将第二个值赋值给变量
+        aval=area[1]
+      }
+    }
+    // 此时将地区的数据传递给对象
+    filters[areaKey] = aval
+    // 对价钱的数据进行处理
+    filters.rentType = mode[0]
+    // price
+    filters.price = price[0]
+    // more
+    filters.more = more.join(',')
+    console.log('filters:', filters);
+    return filters
+
+  }
+
+
   // 点击关闭下拉选项
   onModify = () => {
     // 对状态进行处理
@@ -140,7 +179,12 @@ export default class Filter extends Component {
       currentProps: '',
       //修改保存状态的值
       selectedMenu:newVal
+    }, () => {
+        this.handelFilters(this.selectedIndex)
+      // 传递的数据
+      this.props.onFilter( this.handelFilters(this.selectedIndex))
     })
+
 
   }
   // 点击筛选更多
