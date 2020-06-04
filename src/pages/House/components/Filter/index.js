@@ -148,10 +148,18 @@ export default class Filter extends Component {
     const { currentProps } = this.state
     // 判断当前选中的属性
     if (currentProps === 'more') {
+      const { roomType, oriented, floor, characteristic } = this.filter;
+      const data = { roomType, oriented, floor, characteristic }
       return (
-        <FilterMore></FilterMore>
+        <FilterMore
+          data={data}
+          value={this.selectedIndex[currentProps]}
+          onOk={this.onOk}
+          onModify={this.onModify}
+        />
       )
     }
+    return null
   }
   render () {
 
