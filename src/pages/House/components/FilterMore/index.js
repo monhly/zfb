@@ -12,8 +12,10 @@ export default class FilterMore extends Component {
   }
    renderFilters(data) {
     // 高亮类名： styles.tagActive
-    return (
-      data.map((item) => <span onClick={()=>{this.handlerSel(item.value)}} key={item.value} className={[styles.tag, styles.tagActive].join(' ')}>{item.label}</span>)
+     const {selected}=this.state
+     return (
+      //根据选中的数据进行判断是否有当前选中的值,有的话添加高亮
+      data.map((item) => <span onClick={()=>{this.handlerSel(item.value)}} key={item.value} className={[styles.tag,selected.includes(item.value) ? styles.tagActive : '' ].join(' ')}>{item.label}</span>)
     )
   }
    // 获取选中数据
