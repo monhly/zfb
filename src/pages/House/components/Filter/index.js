@@ -131,6 +131,7 @@ export default class Filter extends Component {
   }
   // 点击确定关闭蒙层
   onOk = (val) => {
+    console.log(val);
      // 顶级确定修改筛选条件的值
      this.selectedIndex[this.state.currentProps]=val
     // 点击确定进行高亮的修改
