@@ -4,7 +4,7 @@ import FilterTitle from '../FilterTitle'
 import FilterPicker from '../FilterPicker'
 import FilterMore from '../FilterMore'
 // 获取axios的请求
-import {getHouse,getHouseList} from"../../../../request/house"
+import {getHouse} from"../../../../request/house"
 import styles from './index.module.css'
 
 // 定义选中菜单的类型
@@ -32,8 +32,7 @@ export default class Filter extends Component {
   // 获取筛选条件的请求
   async getHouses () {
     // 获取本地的value值
-    const { value } =JSON.parse( localStorage.getItem('city'))
-    console.log(value);
+    const { value } = JSON.parse(localStorage.getItem('city'))
     // 根据接口获取筛选条件
     const { status, body } = await getHouse(value)
     if (status === 200) {

@@ -1,33 +1,37 @@
 import React from 'react'
 
-import { Flex } from 'antd-mobile'
+// import { Flex } from 'antd-mobile'
 
 import Filter from './components/Filter'
 // 导入样式
 import styles from './index.module.css'
 // 引入组件
-import {List,AutoSizer} from 'react-virtualized'
+import {List,AutoSizer,InfiniteLoader} from 'react-virtualized'
 // 导入渲染组件
 import HouseItem from "../../components/HouseItem"
 // 导入接口数据
 import { getHouseList } from "../../request/house"
 // 导入基地址
-import{baseurl}from"../../utils/axios"
+import { baseurl } from "../../utils/axios"
 export default class HouseList extends React.Component {
   state = {
     // 房屋列表数据
-    list:[]
+    list: [],
+    // 渲染的数量
+    count:0
   }
   // 获取筛选后的城市列表
   async getCityMsg (datas) {
     // 获取城市列表
     const { value } = JSON.parse(localStorage.getItem('city'))
-
-    const { status, body:{list} } = await getHouseList(value, datas)
+      this.value=value
+    const { status, body: { list, count } } = await getHouseList(value, datas)
+    console.log(list);
 
     if (status === 200) {
       this.setState({
-       list
+        list,
+        count
      })
    }
 
@@ -44,6 +48,23 @@ export default class HouseList extends React.Component {
     // 调用渲染组件的方法
     this.getCityMsg()
   }
+  isRowLoaded =({ index })=> {
+     const {list}=this.state
+    return !!list[index];
+  }
+
+  loadMoreRows =({ startIndex, stopIndex })=> {
+     console.log(startIndex, stopIndex);
+    return getHouseList(this.value,this.filters, startIndex, stopIndex)
+      .then((res) => {
+        console.log('loadmore:', res);
+        // 刷新视图
+        this.setState({
+          list: [...this.state.list, ...res.body.list]
+        }, () => console.log(this.state.list.length))
+      });
+
+  }
    // 渲染列表项方法
   renderHouseItem = ({
     key, // Unique key within array of rows
@@ -54,10 +75,13 @@ export default class HouseList extends React.Component {
     }) => {
 
      // 当前行row数据
-     const { list } = this.state;
-    const item = list[index];
-    console.log(item);
+    const { list } = this.state;
 
+    const item = list[index];
+    // 如果没有数据此时就返回null
+    if (!item) {
+      return null
+    }
      // 处理图片传递的key
      item.src = `${baseurl}${item.houseImg}`
      // row模版
@@ -68,18 +92,29 @@ export default class HouseList extends React.Component {
   // 渲染列表页
   renderHouseList = () => {
     return (
-      <AutoSizer>
-      {({ height, width }) => (
-        <List
-        className={styles.houseList}
-        height={height}
-        rowCount={this.state.list.length}
-        rowHeight={130}
-        rowRenderer={this.renderHouseItem}
-        width={width}
-      />
-    )}
-      </AutoSizer>
+      <InfiniteLoader
+        isRowLoaded={this.isRowLoaded}
+        loadMoreRows={this.loadMoreRows}
+        // 远程数据总条数
+        rowCount={this.state.count}
+      >
+        {({ onRowsRendered, registerChild }) => (
+          <AutoSizer>
+            {({ height, width }) => (
+              <List
+                className={styles.houseList}
+                height={height}
+                rowCount={this.state.count}
+                rowHeight={130}
+                rowRenderer={this.renderHouseItem}
+                onRowsRendered={onRowsRendered}
+                ref={registerChild}
+                width={width}
+              />
+            )}
+          </AutoSizer>
+        )}
+      </InfiniteLoader>
     )
   }
   render () {
