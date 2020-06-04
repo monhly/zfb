@@ -27,11 +27,12 @@ export default class Filter extends Component {
     // 获取本地的value值
     const { value } =JSON.parse( localStorage.getItem('city'))
     console.log(value);
-
+    // 根据接口获取筛选条件
     const { status, body } = await getHouse(value)
-    // 将status保存到this数据中
+    if (status === 200) {
+      // 将status保存到this数据中
     this.filter=body
-   console.log(body,status);
+    }
 
 
   }
@@ -64,7 +65,6 @@ export default class Filter extends Component {
   // 渲染内容区域
   renderContent () {
     if (this.isShow()) {
-
       const { currentProps } = this.state
       // 定义一个渲染的内容传值给子组件
       let data = null
@@ -93,24 +93,66 @@ export default class Filter extends Component {
     }
     return null
   }
+  // 处理筛选器有无条件进行高亮显示的情况
+  handelSel () {
+    // 创建一个新的标题选中状态的对象
+    const newTitleSele = {}
+    // 遍历现在的对象
+    Object.keys(this.selectedIndex).forEach(key => {
+      // 获取当前过滤器中选中的值
+      let cur = this.selectedIndex[key]
+      // 将当前的值进行判断
+      if ( (key === 'area') && (cur[1] !==
+        "null" || cur[0] === 'subway') ) {
+        newTitleSele[key]=true
+      }else if (key === 'mode' && cur[0] !== "null") {
+        newTitleSele[key] = true
+      }
+      else if (key === 'price' && cur[0] !== 'null') {
+        newTitleSele[key]=true
+      }// 后续处理
+      else if (key === 'more' && cur.length !== 0) {
+        // 更多选择项 FilterMore 组件情况
+        newTitleSele[key] = true
+      } else {
+        newTitleSele[key] = false
+      }
+    })
+    return newTitleSele
+  }
   // 点击关闭下拉选项
-  onModify=()=> {
+  onModify = () => {
+    // 对状态进行处理
+    const newVal=this.handelSel()
     this.setState({
-      currentProps:''
+      currentProps: '',
+      selectedMenu:newVal
     })
   }
   // 点击确定关闭蒙层
   onOk = (val) => {
+     // 顶级确定修改筛选条件的值
+     this.selectedIndex[this.state.currentProps]=val
+    // 点击确定进行高亮的修改
+    const newVal=this.handelSel()
     this.setState({
-      currentProps:''
+      currentProps: '',
+      //修改保存状态的值
+      selectedMenu:newVal
     })
-    console.log(val);
-    // 修改传入的值
-    this.selectedIndex[this.state.currentProps]=val
+
   }
-
-
-
+  // 点击筛选更多
+  renderMore()
+  {
+    const { currentProps } = this.state
+    // 判断当前选中的属性
+    if (currentProps === 'more') {
+      return (
+        <FilterMore></FilterMore>
+      )
+    }
+  }
   render () {
 
     return (
@@ -128,7 +170,8 @@ export default class Filter extends Component {
           {/* 前三个菜单对应的内容： */}
           {this.renderContent()}
           {/* 最后一个菜单对应的内容： */}
-          {/* <FilterMore /> */}
+          {/* 点击筛选显示更多的筛选条件 */}
+          {this.renderMore()}
         </div>
       </div>
     )

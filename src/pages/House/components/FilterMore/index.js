@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 
-import FilterFooter from '../../../../components/FilterFooter'
+import FilterFooter from '../../../../components/FilterFooter/index'
 
 import styles from './index.module.css'
 
@@ -28,11 +28,6 @@ export default class FilterMore extends Component {
             <dt className={styles.dt}>朝向</dt>
             <dd className={styles.dd}>{this.renderFilters()}</dd>
 
-            <dt className={styles.dt}>楼层</dt>
-            <dd className={styles.dd}>{this.renderFilters()}</dd>
-
-            <dt className={styles.dt}>房屋亮点</dt>
-            <dd className={styles.dd}>{this.renderFilters()}</dd>
           </dl>
         </div>
 
