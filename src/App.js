@@ -11,7 +11,8 @@ import CityList from "./pages/cityList"
 // 导入404组件
 import NotFind from "./pages/404";
 
-import HouseDetail from"./pages/HouseDetail"
+import HouseDetail from "./pages/HouseDetail"
+import Login from"./pages/Login"
 function App() {
   return (
 
@@ -24,6 +25,8 @@ function App() {
         <Route path="/city" component={CityList}></Route>
         <Route path="/map" component={Map}></Route>
         <Route path="/detail/:id" component={HouseDetail} />
+        {/* 登录组件 */}
+        <Route path="/login" component={Login} />
         <Route component={NotFind}></Route>
      </Switch>
     </Router>
