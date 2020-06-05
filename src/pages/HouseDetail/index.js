@@ -1,10 +1,11 @@
 import React, { Component } from 'react'
 import { Carousel, Flex, Modal, Toast, NavBar, Icon } from 'antd-mobile'
-import axios from 'axios'
 import HouseItem from '../../components/HouseItem'
 import styles from './index.module.css'
 import HousePackage from '../HousePackage'
-import {baseurl} from"../../utils/axios"
+import { baseurl } from "../../utils/axios"
+// 导入axios请求获取房屋的具体信息
+import {getHouseItem} from "../../request/house"
 // 猜你喜欢
 const recommendHouses = [
   {
@@ -127,26 +128,26 @@ export default class HouseDetail extends Component {
     */
 
   // 获取房屋详细信息
-  async getHouseDetail() {
+  async getHouseDetail () {
+    console.log(this.props);
+
     const { id } = this.props.match.params
 
     // 开启loading
     this.setState({
       isLoading: true
     })
+    const res=await getHouseItem(id)
 
-    const res = await axios.get(
-      `${baseurl}houses/5cc47c8d1439630e5b47d45d`
-    )
 
-    // console.log(res.data.body)
+    console.log(res)
 
     this.setState({
-      houseInfo: res.data.body,
+      houseInfo: res.body,
       isLoading: false
     })
 
-    const { community, coord } = res.data.body
+    const { community, coord } = res.body
 
     // 渲染地图
     this.renderMap(community, coord)
@@ -159,7 +160,7 @@ export default class HouseDetail extends Component {
     } = this.state
 
     return houseImg.map(item => (
-      <a key={item} href="http://itcast.cn">
+      <a key={item} href="http://www.baidu.cn">
         <img src={baseurl + item} alt="" />
       </a>
     ))
@@ -169,21 +170,21 @@ export default class HouseDetail extends Component {
   renderMap(community, coord) {
     const { latitude, longitude } = coord
 
-    const map = new BMap.Map('map')
-    const point = new BMap.Point(longitude, latitude)
-    map.centerAndZoom(point, 17)
+    // const map = new BMap.Map('map')
+    // const point = new BMap.Point(longitude, latitude)
+    // map.centerAndZoom(point, 17)
 
-    const label = new BMap.Label('', {
-      position: point,
-      offset: new BMap.Size(0, -36)
-    })
+    // const label = new BMap.Label('', {
+    //   position: point,
+    //   offset: new BMap.Size(0, -36)
+    // })
 
-    label.setStyle(labelStyle)
-    label.setContent(`
-        <span>${community}</span>
-        <div class="${styles.mapArrow}"></div>
-      `)
-    map.addOverlay(label)
+    // label.setStyle(labelStyle)
+    // label.setContent(`
+    //     <span>${community}</span>
+    //     <div class="${styles.mapArrow}"></div>
+    //   `)
+    // map.addOverlay(label)
   }
 
   // 渲染标签
@@ -208,7 +209,10 @@ export default class HouseDetail extends Component {
       )
     })
   }
-
+  // 点击页面进行跳转
+  targetBack = () => {
+    console.log(this.props)
+  }
   render() {
     const {
       isLoading,
@@ -231,7 +235,7 @@ export default class HouseDetail extends Component {
         <NavBar
           mode="dark"
           icon={<Icon type="left" />}
-          onLeftClick={() => console.log('onLeftClick')}
+          onLeftClick={() => { this.props.history.goBack()}}
           rightContent={[<i key="share" className="iconfont icon-share" />]}
         >
           房屋详情

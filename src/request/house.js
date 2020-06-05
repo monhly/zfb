@@ -19,4 +19,13 @@ export function getHouseList (cityId,filters,start,end) {
         end: end||20
        }
    })
+}
+/**
+ *
+ * @param {*} id 获取具体房源的信息
+ */
+export function getHouseItem (id) {
+    return axios({
+          url:"houses/"+id
+      })
   }

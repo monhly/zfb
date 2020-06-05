@@ -21,7 +21,7 @@ export default class HouseList extends React.Component {
     // 房屋列表数据
     list: [],
     // 渲染的数量
-    count:0
+    count:1
   }
   // 获取筛选后的城市列表
   async getCityMsg (datas) {
@@ -29,7 +29,6 @@ export default class HouseList extends React.Component {
     const { value } = JSON.parse(localStorage.getItem('city'))
       this.value=value
     const { status, body: { list, count } } = await getHouseList(value, datas)
-    console.log(list);
     // 判断状态吗是否等于200
     if (status === 200) {
         this.setState({
@@ -49,7 +48,7 @@ export default class HouseList extends React.Component {
   }
   // 父组件接收子组件的数据
   onFilter = (filters) => {
-    console.log('父组件接收子组件的数据:', filters);
+
     // 存储筛选器条件数据
     this.filters = filters
     // 调用接口获取列表数据
@@ -66,14 +65,13 @@ export default class HouseList extends React.Component {
   }
   // 加载更多
   loadMoreRows =({ startIndex, stopIndex })=> {
-     console.log(startIndex, stopIndex);
     return getHouseList(this.value,this.filters, startIndex, stopIndex)
       .then((res) => {
-        console.log('loadmore:', res);
+
         // 刷新视图
         this.setState({
           list: [...this.state.list, ...res.body.list]
-        }, () => console.log(this.state.list.length))
+        })
       });
 
   }
@@ -107,7 +105,6 @@ export default class HouseList extends React.Component {
      );
   }
   OnClick = (item) => {
-    console.log(item);
     const code=item.houseCode
     this.props.history.push('/detail/'+code)
   }
@@ -149,7 +146,7 @@ export default class HouseList extends React.Component {
         {/* 内容渲染区域 */}
 
         {/* 列表 */}
-        {count===0?<NoHouse>没有房源信息</NoHouse>:this.renderHouseList()}
+        {count!==0?this.renderHouseList():<NoHouse>没有房源信息</NoHouse>}
       </div>
     )
   }
