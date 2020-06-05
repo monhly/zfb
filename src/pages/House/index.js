@@ -35,6 +35,13 @@ export default class HouseList extends React.Component {
         this.setState({
           list,
           count
+        }, () => {
+            if (count !== 0) {
+              Toast.info('已找到'+count+'条数据',1)
+            } else {
+              Toast.fail('暂无数据',1)
+            }
+
        })
 
     }
