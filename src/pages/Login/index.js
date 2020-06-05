@@ -1,16 +1,53 @@
 import React, { Component } from 'react'
-import { Flex, WingBlank, WhiteSpace, NavBar } from 'antd-mobile'
+import { Flex, WingBlank, WhiteSpace, NavBar, Toast } from 'antd-mobile'
 
 import { Link } from 'react-router-dom'
 
 import styles from './index.module.css'
-
+import { getLogin } from "../../request/login"
+import { withFormik } from 'formik';
 // 验证规则：
 // const REG_UNAME = /^[a-zA-Z_\d]{5,8}$/
 // const REG_PWD = /^[a-zA-Z_\d]{5,12}$/
 
 class Login extends Component {
+  state = {
+    username:'',
+    password:''
+  }
+  // 阻止表单默认提交
+  onSubmits = (e) => {
+    e.preventDefault()
+    // 获取前的值
+    this.getLoginMsg()
+    // 发送axios请求
+  }
+  // 表单输入事件
+  onChanges = (e) => {
+    // 根据获取的name属性进行赋值
+    let code=e.target.name
+    this.setState({
+     [code]:e.target.value
+    })
+
+  }
+  // 获取axios请求验证表单
+ getLoginMsg=  async ()=> {
+    const {body,status} =await getLogin(this.state)
+    // 对获取的数据进行判断
+   if (status === 200) {
+      // 请求成功保存token
+   } else {
+     Toast.fail('密码或验证码错误',1)
+   }
+  }
   render() {
+    const {
+      values,
+      errors,
+      handleChange,
+      handleSubmit,
+    } =this.props;
     return (
       <div className={styles.root}>
         {/* 顶部导航 */}
@@ -21,9 +58,11 @@ class Login extends Component {
 
         {/* 登录表单 */}
         <WingBlank>
-          <form>
+          <form onSubmit={handleSubmit}>
             <div className={styles.formItem}>
               <input
+                value={values.username}
+                onChange={handleChange}
                 className={styles.input}
                 name="username"
                 placeholder="请输入账号"
@@ -33,9 +72,11 @@ class Login extends Component {
             {/* <div className={styles.error}>账号为必填项</div> */}
             <div className={styles.formItem}>
               <input
+                value={values.password}
                 className={styles.input}
                 name="password"
                 type="password"
+                onChange={this.onChanges}
                 placeholder="请输入密码"
               />
             </div>
@@ -54,8 +95,28 @@ class Login extends Component {
           </Flex>
         </WingBlank>
       </div>
+
     )
   }
 }
 
-export default Login
+export default  withFormik({
+  mapPropsToValues: () => ({ username: '',password:'' }),
+
+  // Custom sync validation
+  validate: values => {
+    const errors = {};
+
+    if (!values.username) {
+      errors.username = 'Required';
+    }
+
+    return errors;
+  },
+
+  handleSubmit: (values) => {
+   console.log(values);
+
+  },
+})(Login);
+
