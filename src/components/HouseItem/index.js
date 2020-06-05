@@ -8,7 +8,8 @@ import PropTypes from 'prop-types'
 
 import styles from './index.module.css'
 
-function HouseItem({ src, title, desc, tags, price, onClick, style }) {
+function HouseItem ({ src, title, desc, tags, price, onClick, style }) {
+
   return (
     <div className={styles.house} onClick={onClick} style={style}>
       <div className={styles.imgWrap}>

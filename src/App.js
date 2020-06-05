@@ -9,7 +9,9 @@ import Map from './pages/map'
 //导入城市的页面
 import CityList from "./pages/cityList"
 // 导入404组件
-import  NotFind  from "./pages/404";
+import NotFind from "./pages/404";
+
+import HouseDetail from"./pages/HouseDetail"
 function App() {
   return (
 
@@ -21,6 +23,7 @@ function App() {
         <Route path="/home" component={Home}></Route>
         <Route path="/city" component={CityList}></Route>
         <Route path="/map" component={Map}></Route>
+        <Route path="/detail/:id" component={HouseDetail} />
         <Route component={NotFind}></Route>
      </Switch>
     </Router>
