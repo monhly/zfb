@@ -16,7 +16,7 @@ import list from "../../utils/tabBarArr"
 
 export default class Home extends Component {
   state = {
-    selectedTab: '/home',
+    selectedTab: this.props.location.pathname,
     // 定义变量保存数据
   }
   // 底部tabbar的数据
