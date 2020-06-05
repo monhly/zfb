@@ -13,6 +13,9 @@ import HouseItem from "../../components/HouseItem"
 import { getHouseList } from "../../request/house"
 // 导入基地址
 import { baseurl } from "../../utils/axios"
+import { Toast } from 'antd-mobile'
+// 导入无房组件
+import NoHouse from"../../components/NoHouse/index"
 export default class HouseList extends React.Component {
   state = {
     // 房屋列表数据
@@ -27,13 +30,14 @@ export default class HouseList extends React.Component {
       this.value=value
     const { status, body: { list, count } } = await getHouseList(value, datas)
     console.log(list);
-
+    // 判断状态吗是否等于200
     if (status === 200) {
-      this.setState({
-        list,
-        count
-     })
-   }
+        this.setState({
+          list,
+          count
+       })
+
+    }
 
   }
   // 父组件接收子组件的数据
@@ -48,11 +52,12 @@ export default class HouseList extends React.Component {
     // 调用渲染组件的方法
     this.getCityMsg()
   }
+  // 是否加载的条件
   isRowLoaded =({ index })=> {
      const {list}=this.state
     return !!list[index];
   }
-
+  // 加载更多
   loadMoreRows =({ startIndex, stopIndex })=> {
      console.log(startIndex, stopIndex);
     return getHouseList(this.value,this.filters, startIndex, stopIndex)
@@ -96,6 +101,7 @@ export default class HouseList extends React.Component {
   // 渲染列表页
   renderHouseList = () => {
     return (
+      // 使用vertical组件提供的无限加载1
       <InfiniteLoader
         isRowLoaded={this.isRowLoaded}
         loadMoreRows={this.loadMoreRows}
@@ -122,6 +128,7 @@ export default class HouseList extends React.Component {
     )
   }
   render () {
+    const {count}=this.state
     return (
       <div className={styles.root}>
         {/* 条件筛选栏 */}
@@ -129,8 +136,7 @@ export default class HouseList extends React.Component {
         {/* 内容渲染区域 */}
 
         {/* 列表 */}
-        {this.renderHouseList()}
-
+        {count===0?<NoHouse>没有房源信息</NoHouse>:this.renderHouseList()}
       </div>
     )
   }
