@@ -47,7 +47,7 @@ class Login extends Component {
       errors,
       handleChange,
       handleSubmit,
-    } =this.props;
+    } = this.props;
     return (
       <div className={styles.root}>
         {/* 顶部导航 */}
@@ -76,7 +76,7 @@ class Login extends Component {
                 className={styles.input}
                 name="password"
                 type="password"
-                onChange={this.onChanges}
+                onChange={handleChange}
                 placeholder="请输入密码"
               />
             </div>
@@ -114,8 +114,18 @@ export default  withFormik({
     return errors;
   },
 
-  handleSubmit: (values) => {
-   console.log(values);
+  handleSubmit: async(value) => {
+  //
+    // 获取表单的值
+    // 进行数据的请求
+    const { status,description, body } = await getLogin(value)
+    // 对请求的数据进行判断
+    if (status === 200) {
+      window.localStorage.setItem('token', body.token)
+      Toast.success(description, 2)
+    } else {
+      Toast.fail(description)
+    }
 
   },
 })(Login);
