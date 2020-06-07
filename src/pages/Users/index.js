@@ -146,7 +146,6 @@ export default class Profile extends Component {
               )
           }
         />
-
         {/* 加入我们 */}
         <div className={styles.ad}>
           <img src={baseurl + '/img/profile/join.png'} alt="" />

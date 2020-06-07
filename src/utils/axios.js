@@ -2,7 +2,7 @@
 import axios from "axios"
 // 导入吐司
 import { Toast} from 'antd-mobile';
-
+import {getToken}from"./token"
 //设置基准地址
 const baseurl = "http://api-haoke-dev.itheima.net"
 // 导出基准地址
@@ -13,7 +13,16 @@ const instance = axios.create({
 // Add a request interceptor配置请求
 instance.interceptors.request.use(function (config) {
     // 请求中使用加载中提示框
-    Toast.loading('Loading...', 1);
+  Toast.loading('Loading...', 1);
+  // 请求数据进行设置
+  console.log(config);
+  const { url, headers } = config
+  // 对以/user开头的数据进行请求头的设置
+  //并且不是登录和注册的接口
+  if (url.startsWith('user') && url !== '/user/registered' && url !== '/user/login') {
+    headers.authorization=getToken('token')
+}
+
     return config;
   }, function (error) {
     // Do something with request error
