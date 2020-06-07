@@ -31,10 +31,10 @@ export default class Profile extends Component {
         userMsg:{}
     }
     // 判断是否登陆
-    isLogin= async()=> {
-            const data=getToken('token')
+    isLogin = async () => {
+
         //    获取到token以后,此时是登录的状态
-            const { status, body } = await getUserMsg(data)
+            const { status, body } = await getUserMsg()
             console.log(status,body);
         //   获取数据成功
             if (status === 200) {
@@ -54,12 +54,11 @@ export default class Profile extends Component {
     }
     // 点击退出
     logout = () => {
-        const token=getToken('token')
         alert('提示', '确定退出吗？', [
           { text: '取消' },
           {
             text: '确定', onPress: async () => {
-              let res = await logout(token);
+              let res = await logout();
               console.log(res)
               if (res.status === 200) {
                 removeToken('token');

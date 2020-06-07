@@ -1,10 +1,10 @@
 import axios from "../utils/axios"
-export function getUserMsg(msg){
+export function getUserMsg(){
     return axios({
         url: 'user',
     })
 }
-export function logout (token) {
+export function logout () {
     return axios({
         url: 'user/logout',
         method: 'post',

@@ -15,7 +15,6 @@ instance.interceptors.request.use(function (config) {
     // 请求中使用加载中提示框
   Toast.loading('Loading...', 1);
   // 请求数据进行设置
-  console.log(config);
   const { url, headers } = config
   // 对以/user开头的数据进行请求头的设置
   //并且不是登录和注册的接口
