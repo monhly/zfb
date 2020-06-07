@@ -7,3 +7,12 @@ export function getUserMsg(msg){
         }
     })
 }
+export function logout (token) {
+    return axios({
+        url: 'user/logout',
+        method: 'post',
+        headers: {
+            authorization:token
+        }
+    })
+}

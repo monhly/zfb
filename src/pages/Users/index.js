@@ -1,14 +1,14 @@
 import React, { Component } from 'react'
 
 import { Link } from 'react-router-dom'
-import { Grid, Button, Toast } from 'antd-mobile'
+import { Grid, Button, Toast,Modal } from 'antd-mobile'
 
 import { baseurl } from '../../utils/axios'
 
 import styles from './index.module.css'
 import {getToken,isAuth,removeToken} from"../../utils/token"
 // 导入axios请求
-import{getUserMsg} from"../../request/user"
+import{getUserMsg,logout} from"../../request/user"
 // 菜单数据
 const menus = [
   { id: 1, name: '我的收藏', iconfont: 'icon-coll', to: '/favorate' },
@@ -25,7 +25,7 @@ const menus = [
 
 // 默认头像
 const DEFAULT_AVATAR = baseurl + '/img/profile/avatar.png'
-
+let alert=Modal.alert
 export default class Profile extends Component {
     state = {
         userMsg:{}
@@ -42,18 +42,37 @@ export default class Profile extends Component {
                     userMsg:body
                 })
             } else {
-        Toast.fail('信息错误', 1)
+        Toast.fail('您还未登录', 1)
         removeToken('token')
-        this.props.history.push('/login')
         }
     }
     componentDidMount () {
         console.log(getToken('token'));
         console.log(isAuth('token'));
         console.log(this.props);
-
         this.isLogin()
     }
+    // 点击退出
+    logout = () => {
+        const token=getToken('token')
+        alert('提示', '确定退出吗？', [
+          { text: '取消' },
+          {
+            text: '确定', onPress: async () => {
+              let res = await logout(token);
+              console.log(res)
+              if (res.status === 200) {
+                removeToken('token');
+                this.setState({
+                  userInfo: {}
+                })
+              } else {
+                this.props.history.push('/login')
+              }
+            }
+          },
+        ])
+      }
     render () {
     //   获取路由的信息
     const { history } = this.props
