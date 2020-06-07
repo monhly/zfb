@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom'
 
 import styles from './index.module.css'
 import { getLogin } from "../../request/login"
+import {setToken} from"../../utils/token"
 import { withFormik } from 'formik';
 import * as Yup from 'yup';
 // 验证规则：
@@ -104,7 +105,7 @@ export default  withFormik({
     const { status,description, body } = await getLogin(value)
     // 对请求的数据进行判断
     if (status === 200) {
-      window.localStorage.setItem('token', body.token)
+      setToken('token',body.token)
       Toast.success(description, 2)
       // 获取formikBag里面的props属性进行页面的跳转
       formikBag.props.history.push('/home/user')

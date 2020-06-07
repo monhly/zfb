@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Carousel, Flex, Modal, Toast, NavBar, Icon } from 'antd-mobile'
+import { Carousel, Flex, NavBar, Icon } from 'antd-mobile'
 import HouseItem from '../../components/HouseItem'
 import styles from './index.module.css'
 import HousePackage from '../HousePackage'
@@ -34,25 +34,25 @@ const recommendHouses = [
   }
 ]
 
-// 百度地图
-const BMap = window.BMap
+// // 百度地图
+// const BMap = window.BMap
 
-const labelStyle = {
-  position: 'absolute',
-  zIndex: -7982820,
-  backgroundColor: 'rgb(238, 93, 91)',
-  color: 'rgb(255, 255, 255)',
-  height: 25,
-  padding: '5px 10px',
-  lineHeight: '14px',
-  borderRadius: 3,
-  boxShadow: 'rgb(204, 204, 204) 2px 2px 2px',
-  whiteSpace: 'nowrap',
-  fontSize: 12,
-  userSelect: 'none'
-}
+// const labelStyle = {
+//   position: 'absolute',
+//   zIndex: -7982820,
+//   backgroundColor: 'rgb(238, 93, 91)',
+//   color: 'rgb(255, 255, 255)',
+//   height: 25,
+//   padding: '5px 10px',
+//   lineHeight: '14px',
+//   borderRadius: 3,
+//   boxShadow: 'rgb(204, 204, 204) 2px 2px 2px',
+//   whiteSpace: 'nowrap',
+//   fontSize: 12,
+//   userSelect: 'none'
+// }
 
-const alert = Modal.alert
+// const alert = Modal.alert
 
 export default class HouseDetail extends Component {
   state = {
@@ -98,9 +98,6 @@ export default class HouseDetail extends Component {
 
   componentDidMount() {
     // 获取配置好的路由参数：
-    // console.log('路由参数对象：', this.props.match.params)
-    // console.log(this.props)
-
     // 获取房屋数据
     this.getHouseDetail()
   }
@@ -129,7 +126,6 @@ export default class HouseDetail extends Component {
 
   // 获取房屋详细信息
   async getHouseDetail () {
-    console.log(this.props);
 
     const { id } = this.props.match.params
 
@@ -138,9 +134,6 @@ export default class HouseDetail extends Component {
       isLoading: true
     })
     const res=await getHouseItem(id)
-
-
-    console.log(res)
 
     this.setState({
       houseInfo: res.body,
@@ -168,7 +161,7 @@ export default class HouseDetail extends Component {
 
   // 渲染地图
   renderMap(community, coord) {
-    const { latitude, longitude } = coord
+    // const { latitude, longitude } = coord
 
     // const map = new BMap.Map('map')
     // const point = new BMap.Point(longitude, latitude)
@@ -211,7 +204,6 @@ export default class HouseDetail extends Component {
   }
   // 点击页面进行跳转
   targetBack = () => {
-    console.log(this.props)
   }
   render() {
     const {

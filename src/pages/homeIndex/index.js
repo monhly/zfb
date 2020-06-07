@@ -180,7 +180,8 @@ export default class HomeIndex extends Component {
                 // 租房小组的信息
                 ZuFArr: data[1].body,
                 // 最新咨询的信息
-                hotArr:data[2].body
+                hotArr: data[2].body,
+                statusLunBo:true
             })
         }
 
