@@ -1,12 +1,12 @@
 import React, { Component } from 'react'
 
 import { Link } from 'react-router-dom'
-import { Grid, Button } from 'antd-mobile'
+import { Grid, Button, Toast } from 'antd-mobile'
 
 import { baseurl } from '../../utils/axios'
 
 import styles from './index.module.css'
-import {getToken,isAuth} from"../../utils/token"
+import {getToken,isAuth,removeToken} from"../../utils/token"
 // 导入axios请求
 import{getUserMsg} from"../../request/user"
 // 菜单数据
@@ -31,22 +31,27 @@ export default class Profile extends Component {
         userMsg:{}
     }
     // 判断是否登陆
-   async isLogin () {
-        const data=isAuth('token')
-        if (data) {
+    isLogin= async()=> {
+            const data=getToken('token')
         //    获取到token以后,此时是登录的状态
-          const {status,body}=await getUserMsg(data)
+            const { status, body } = await getUserMsg(data)
+            console.log(status,body);
         //   获取数据成功
             if (status === 200) {
                 this.setState({
                     userMsg:body
                 })
-            }
-       }
+            } else {
+        Toast.fail('信息错误', 1)
+        removeToken('token')
+        this.props.history.push('/login')
+        }
     }
     componentDidMount () {
         console.log(getToken('token'));
         console.log(isAuth('token'));
+        console.log(this.props);
+
         this.isLogin()
     }
     render () {
