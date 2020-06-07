@@ -1,11 +1,13 @@
 import React, { Component } from 'react'
-import { Carousel, Flex, NavBar, Icon } from 'antd-mobile'
+import { Carousel, Flex, NavBar, Icon,Modal } from 'antd-mobile'
 import HouseItem from '../../components/HouseItem'
 import styles from './index.module.css'
 import HousePackage from '../HousePackage'
 import { baseurl } from "../../utils/axios"
 // 导入axios请求获取房屋的具体信息
-import {getHouseItem} from "../../request/house"
+import { getHouseItem } from "../../request/house"
+// 导出token
+import {isAuth}from "../../utils/token"
 // 猜你喜欢
 const recommendHouses = [
   {
@@ -52,7 +54,7 @@ const recommendHouses = [
 //   userSelect: 'none'
 // }
 
-// const alert = Modal.alert
+const alert = Modal.alert
 
 export default class HouseDetail extends Component {
   state = {
@@ -101,7 +103,27 @@ export default class HouseDetail extends Component {
     // 获取房屋数据
     this.getHouseDetail()
   }
+  // 设置收藏房源
+  handleFavorite = () => {
+    // 点击收藏判断用户是否登陆
+    if (isAuth('token')) {
+      //此时用户已经登录
+      // 发送请求对数据进行修改
+    } else {
+      // 如此时没有登录
+      // 弹框进行提醒
+      alert('温馨提示', '您还没有登录确定要登录吗?', [
+        { text: '取消', onPress: () =>{}},
+        {
+          text: '确定', onPress: () =>
+            //跳转到登录页面,进行跳转
+            this.props.history.replace({ pathname: '/login', historyName: this.props.match.params.id })
+        },
+      ]);
 
+
+    }
+  }
   /*
       收藏房源：
 

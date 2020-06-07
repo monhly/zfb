@@ -100,7 +100,7 @@ export default  withFormik({
   //
     // 获取表单的值
     // 进行数据的请求
-    console.log(formikBag);
+    console.log(formikBag.props);
 
     const { status,description, body } = await getLogin(value)
     // 对请求的数据进行判断
@@ -108,7 +108,16 @@ export default  withFormik({
       setToken('token',body.token)
       Toast.success(description, 2)
       // 获取formikBag里面的props属性进行页面的跳转
-      formikBag.props.history.push('/home/user')
+      // 对数据进行判断
+      const { historyName } = formikBag.props.location
+      // 如果有之前的历史记录就跳转到历史记录中去
+      if (historyName) {
+        formikBag.props.history.push('detail/'+historyName)
+      } else {
+        // 如果没有历史记录就跳转到user中去
+        formikBag.props.history.push('/home/user')
+      }
+
     } else {
       Toast.fail(description)
     }
