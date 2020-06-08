@@ -92,7 +92,20 @@ export default class RentAdd extends Component {
       }
     ])
   }
+  // 点击输入相应的值
+  onChange (item,value) {
 
+    this.setState({
+      [item]:value
+    })
+  }
+  // // picker组件
+  // onTextChange (item,value) {
+  //   this.setState({
+  //     [item]:value
+  //   })
+
+  // }
   render() {
     const Item = List.Item
     const { history } = this.props
@@ -132,22 +145,22 @@ export default class RentAdd extends Component {
           >
             小区名称
           </Item>
-          <InputItem placeholder="请输入租金/月" extra="￥/月" type="number" value={price}>
+          <InputItem placeholder="请输入租金/月" extra="￥/月" type="number" value={price} onChange={(e)=>{this.onChange("price",e)}}>
             租&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;金
           </InputItem>
-          <InputItem placeholder="请输入建筑面积" extra="㎡" type="number" value={size}>
+          <InputItem placeholder="请输入建筑面积" extra="㎡" type="number" value={size} onChange={(e) => { this.onChange("size", e) }}>
             建筑面积
           </InputItem>
-          <Picker data={roomTypeData} value={[roomType]} cols={1}>
+          <Picker data={roomTypeData} value={[roomType]} cols={1} onChange={(value) => { this.onChange("roomType",value[0]) }} >
             <Item arrow="horizontal">
               户&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;型
             </Item>
           </Picker>
 
-          <Picker data={floorData} value={[floor]} cols={1}>
+          <Picker data={floorData} value={[floor]} cols={1} onChange={(value) => { this.onChange("floor",value[0]) }} >
             <Item arrow="horizontal">所在楼层</Item>
           </Picker>
-          <Picker data={orientedData} value={[oriented]} cols={1}>
+          <Picker data={orientedData} value={[oriented]} cols={1} onChange={(value) => { this.onChange("oriented",value[0]) }}>
             <Item arrow="horizontal">
               朝&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;向
             </Item>
