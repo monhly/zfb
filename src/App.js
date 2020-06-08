@@ -12,7 +12,10 @@ import CityList from "./pages/cityList"
 import NotFind from "./pages/404";
 
 import HouseDetail from "./pages/HouseDetail"
-import Login from"./pages/Login"
+import Login from "./pages/Login"
+import Rent from "./pages/Rent"
+import RentAdd from "./pages/Rent/Add"
+import RentSearch from"./pages/Rent/Search"
 function App() {
   return (
 
@@ -27,6 +30,9 @@ function App() {
         <Route path="/detail/:id" component={HouseDetail} />
         {/* 登录组件 */}
         <Route path="/login" component={Login} />
+        <Route path="/rent" exact component={Rent} />
+        <Route path="/rent/add" component={RentAdd} />
+        <Route path="/rent/search" component={RentSearch} />
         <Route component={NotFind}></Route>
      </Switch>
     </Router>
