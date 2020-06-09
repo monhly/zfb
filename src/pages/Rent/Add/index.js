@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-
+import {uploadImg,publishHouse} from "../../../request/rent"
 import {
   Flex,
   List,
@@ -9,7 +9,8 @@ import {
   TextareaItem,
   Modal,
   NavBar,
-  Icon
+  Icon,
+  Toast
 } from 'antd-mobile'
 
 import HousePackage from '../../HousePackage/index'
@@ -99,13 +100,78 @@ export default class RentAdd extends Component {
       [item]:value
     })
   }
-  // // picker组件
-  // onTextChange (item,value) {
-  //   this.setState({
-  //     [item]:value
-  //   })
+  // 上传图片
+  handleImage = (files, type, index) => {
+    console.log(files, type, index)
+    this.setState({
+      tempSlides: files
+    })
+  }
+  // 点击提交
+  certifyBtn =async ()=> {
+    // 点击确认提交,处理图片 调用接口,获取图片的路径
+    // 判断有无图片
+    const {
+      tempSlides,
+      title,
+      description,
+      oriented,
+      supporting,
+      price,
+      roomType,
+      size,
+      floor,
+      community
+    } = this.state;
+    // 处理表单值为空的情况
+    // 处理边界
+    if (!title || !size || !price) {
+      return Toast.info('请输入房源基本信息！', 1)
+    }
+    let houseImg
+    // 处理上传图片的问题
+    if (tempSlides.length) {
+      let fm = new FormData();
+      tempSlides.forEach((item) => fm.append('file', item.file));
+      let {status,body} = await uploadImg(fm);
+      // 如果图片获取成功
+      if (status === 200) {
+        houseImg=body.join('|')
+      }
+    } else {
+      // 如果没有图片提醒用户上传图片
+      Toast.info('请上传图片',1)
+    }
+    // 处理其他的数据
+    const otd = {
+      title,
+      description,
+      houseImg,
+      oriented,
+      supporting,
+      price,
+      roomType,
+      size,
+      floor,
+      community:community.id
+    };
+    //发送请求
+    const {status,description,} = await publishHouse(otd)
+    // 如果请求成功
+    if (status === 200) {
+      Toast.success('发布成功！', 1, () => {
+        this.props.history.push('/rent')
+      })
+    } else {
+      if (status === 400) {
+        Toast.info('请重新登录！', 1, () => {
+          // 传入回跳地址
+          this.props.history.push('/login', { backUrl: this.props.location.pathname })
+        })
+      }
+    }
 
-  // }
+  }
   render() {
     const Item = List.Item
     const { history } = this.props
@@ -175,6 +241,7 @@ export default class RentAdd extends Component {
           <InputItem
             placeholder="请输入标题（例如：整租 小区名 2室 5000元）"
             value={title}
+            onChange={(e) => { this.onChange("title", e) }}
           />
         </List>
 
@@ -187,6 +254,8 @@ export default class RentAdd extends Component {
             files={tempSlides}
             multiple={true}
             className={styles.imgpicker}
+            onChange={this.handleImage}
+
           />
         </List>
 
@@ -195,7 +264,11 @@ export default class RentAdd extends Component {
           renderHeader={() => '房屋配置'}
           data-role="rent-list"
         >
-          <HousePackage select />
+          <HousePackage select onSelect={selectNames => {
+        this.setState({
+        supporting: selectNames.join('|')
+    })
+  }} />
         </List>
 
         <List
@@ -208,6 +281,7 @@ export default class RentAdd extends Component {
             placeholder="请输入房屋描述信息"
             autoHeight
             value={description}
+            onChange={(e) => { this.onChange("description", e) }}
           />
         </List>
 
@@ -215,7 +289,7 @@ export default class RentAdd extends Component {
           <Flex.Item className={styles.cancel} onClick={this.onCancel}>
             取消
           </Flex.Item>
-          <Flex.Item className={styles.confirm} onClick={this.addHouse}>
+          <Flex.Item className={styles.confirm} onClick={this.certifyBtn}>
             提交
           </Flex.Item>
         </Flex>

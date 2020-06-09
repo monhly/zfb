@@ -11,3 +11,16 @@ export function getCommunity (name,id) {
         }
     })
 }
+/**
+ * 获取表单的信息
+ */
+export function uploadImg(fm) {
+    return axios.post('houses/image', fm)
+}
+  /**
+   * 发布房源
+   */
+export function publishHouse (datas) {
+     return axios.post('user/houses', datas)
+
+  }

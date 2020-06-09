@@ -56,7 +56,7 @@ const HOUSE_PACKAGE = [
   }
 ]
 
-/* 
+/*
   该组件的两种功能：
   1 根据传入的 list 展示房屋配置列表（房源详情页面）
     <HousePackage list={['衣柜', '洗衣机']} />
