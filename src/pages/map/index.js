@@ -26,8 +26,7 @@ export default class Map extends Component {
                 // 添加平移的控件
                 map.addControl(new BMap.NavigationControl());
                 map.addControl(new BMap.ScaleControl());
-                // 缩略地图
-                map.addControl(new BMap.OverviewMapControl());
+
                 // 添加遮罩层
                 const opts = {
                     position : point,    // 指定文本标注所在的地理位置
@@ -45,6 +44,12 @@ export default class Map extends Component {
                     backgroundColor: 'transparent',
                     border:'none'
                 });
+                // 设置遮罩层的点击事件
+                label.addEventListener('click', function (e) {
+
+
+
+                })
                   map.addOverlay(label);
                             }
         },
