@@ -1,19 +1,34 @@
 import React, { Component } from 'react'
 import { NavBar, Icon } from 'antd-mobile';
+import {getCurrCity}from"../../utils/getCity"
 export default class Map extends Component {
     componentDidMount () {
         this.init()
 
     }
     // 初始化地图
-    init () {
+    init =async()=> {
         const { BMap } = window;
         // 1. 创建地图实例
         const map = new BMap.Map("container");
-        // 2. 地图定位的经纬度设置(天安门)
-        let point = new BMap.Point(116.404, 39.915);
-        // 3. 设置地图的位置和缩放级别
-        map.centerAndZoom(point, 15);
+        const {  lable } = await getCurrCity();
+       // 创建地址解析器实例
+        var myGeo = new BMap.Geocoder();
+        // 将地址解析结果显示在地图上，并调整地图视野
+        myGeo.getPoint(null, function(point){
+            if (point) {
+                map.centerAndZoom(point, 11);
+                // 添加遮罩层
+                map.addOverlay(new BMap.Marker(point));
+                // 添加控件
+                // 添加平移的控件
+                map.addControl(new BMap.NavigationControl());
+                map.addControl(new BMap.ScaleControl());
+                // 缩略地图
+                map.addControl(new BMap.OverviewMapControl());
+                            }
+        },
+        lable);
     }
 
 
