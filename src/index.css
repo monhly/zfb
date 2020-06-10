@@ -10,6 +10,12 @@ body {
 #root,.app {
     height: 100%;
 }
+.mapIndex{
+    height: 100%;
+}
+#container{
+    height: calc(100% - 45px)
+}
 h1,
 h2,
 h3,

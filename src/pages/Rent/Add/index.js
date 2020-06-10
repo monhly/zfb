@@ -156,7 +156,7 @@ export default class RentAdd extends Component {
       community:community.id
     };
     //发送请求
-    const {status,description,} = await publishHouse(otd)
+    const {status} = await publishHouse(otd)
     // 如果请求成功
     if (status === 200) {
       Toast.success('发布成功！', 1, () => {
