@@ -21,3 +21,14 @@ export function getHotMsg (id) {
         url:'home/news?area='+id
     })
 }
+/**
+ * 获取城市的信息
+ */
+export function getCityInfo (place) {
+    return axios({
+        url: 'area/info',
+        params: {
+            name:place
+        }
+    })
+}

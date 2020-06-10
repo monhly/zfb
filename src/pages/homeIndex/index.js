@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 // 导入轮播图的组件
 import { Carousel ,Flex,Grid,WingBlank,SearchBar} from 'antd-mobile';
 //导入axios组件
-import { getLunbo, getZuFang,getHotMsg } from "../../request/home"
+import { getLunbo, getZuFang,getHotMsg,getCityInfo } from "../../request/home"
 // 图片根路径
 import { baseurl } from "../../utils/axios"
 // 导入样式
@@ -19,7 +19,7 @@ export default class HomeIndex extends Component {
         // 轮播图的状态
         statusLunBo: false,
         // 地点的信息
-        place: '',
+        place: {},
         // 租房小组的数据
         ZuFArr: [],
         //最新资讯的区域
@@ -75,6 +75,7 @@ export default class HomeIndex extends Component {
             </div>
         )
     }
+
     // 更多的组件
     More () {
       return(
@@ -137,13 +138,13 @@ export default class HomeIndex extends Component {
         )
     }
     // 顶部搜索的区域
-    Search () {
+    Search =()=> {
         return (
             <div className="search">
            <Flex justify="around" className="topNav">
                     <div className="searchBox">
                     <div className="city" onClick={()=>{this.props.history.push('/city')}}>
-                        北京<i className="iconfont icon-arrow" />
+                            {this.state.place.label}<i className="iconfont icon-arrow" />
                     </div>
                     <SearchBar
                         value={this.state.keyword}
@@ -159,8 +160,28 @@ export default class HomeIndex extends Component {
             </div>
         )
     }
+    //使用百度地图获取当前城市
+    // 获取当前城市信息
+    getCityId = () => {
+        var myCity = new window.BMap.LocalCity();
+         const myFun= async(result)=> {
+            //此时的result就是获取的当前的城市信息
+            // 根据获取到的信息发送axios请求,获取城市详细信息
+           const {status,body} = await getCityInfo(result.name)
+
+           if (status === 200) {
+            this.setState({
+                place: body
+              })
+          }
+
+        }
+        myCity.get(myFun);
+
+  }
      // 组件渲染完成以后
-    async componentDidMount() {
+    async componentDidMount () {
+       this.getCityId()
     //    使用promise.all进行数据请求的重构
          const data=await Promise.all([ // simulate img loading
             // 获取轮播图请求
