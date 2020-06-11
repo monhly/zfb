@@ -151,16 +151,14 @@ export default class Map extends Component {
       border: 'none'
     });
     // 添加点击事件
-    label.addEventListener('click',  () => {
+    label.addEventListener('click',  (e) => {
       // 获取小区的信息请求
       this.getMsgOfHome(value)
-      this.setState({
-        isShowList:true
-      })
-      console.log(this);
-
+      // 点击小区实现居中的效果
+      this.moveToCenter(e)
     })
     this.map.addOverlay(label);
+
   }
    // 渲染小区下房屋列表
    renderHouseList = () => {
@@ -204,9 +202,22 @@ export default class Map extends Component {
      console.log(body);
 
      this.setState({
-       list:body.list
+       list: body.list,
+       isShowList:true
      })
    }
+  }
+  // 点击小区实现中心坐标轴的位移
+  moveToCenter (e) {
+    const{clientX,clientY}=e.changedTouches[0]
+    console.log(e, window.screen.height);
+    // 设置中心点的位置
+    let cx, cy
+    cx =window.screen.width/2
+    cy = (window.screen.height - 330) / 2
+
+    this.map.panBy(cx-clientX,cy-clientY)
+
   }
 
  render () {
