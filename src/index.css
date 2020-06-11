@@ -1,13 +1,36 @@
+
+
+
+html,
 body {
+    height: 100%;
+    color: #333;
+    background: #fff;
+}
+#root,.app {
+    height: 100%;
+}
+.mapIndex{
+    height: 100%;
+}
+#container{
+    height: calc(100% - 45px)
+}
+h1,
+h2,
+h3,
+p,
+ul,
+dd {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  padding:0;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+ul,li {
+    list-style: none;
+}
+
+* {
+    touch-action: pan-y;
+    box-sizing: border-box;
 }
