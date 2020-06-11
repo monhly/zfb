@@ -1,7 +1,7 @@
 import React from 'react';
 
 // 导入路由的组件
-import { BrowserRouter as Router, Route, Switch ,Redirect} from "react-router-dom"
+import { HashRouter as Router, Route, Switch ,Redirect} from "react-router-dom"
 //首页组件
 import Home from "./pages/home"
 // 导入地图找房组件
