@@ -21,9 +21,19 @@ export default class Map extends Component {
     // 初始化地图
     init =async()=> {
         // 挂载到实例上
-     this.BMap = window.BMap;
+    this.BMap = window.BMap;
     // 创建地图实例
-    this.map = new  this.BMap.Map("container");
+
+      this.map = new this.BMap.Map("container");
+      this.map.addEventListener('movestart', (e)=>{
+      //  根据地图的移动进行清除小区信息
+        const { isShowList } = this.state
+        if (isShowList) {
+          this.setState({
+            isShowList:false
+          })
+        }
+      })
         const { value, lable } = await getCurrCity();
        // 创建地址解析器实例
         const myGeo = new  this.BMap.Geocoder();
@@ -35,7 +45,8 @@ export default class Map extends Component {
                 // 添加控件
                 // 添加平移的控件
                 this.map.addControl(new  this.BMap.NavigationControl());
-                this.map.addControl(new  this.BMap.ScaleControl());
+              this.map.addControl(new this.BMap.ScaleControl());
+              // 渲染遮罩层的数据
                 this.renderOverLays(value)
 
                 }
@@ -126,6 +137,7 @@ export default class Map extends Component {
       // map.clearOverlays();
       setTimeout(() => this.map.clearOverlays());
     })
+
     this.map.addOverlay(label);
     }
     // 处理小区情况
@@ -133,7 +145,7 @@ export default class Map extends Component {
     // 绘制覆盖物
       const { coord: { longitude, latitude }, label: areaName, value, count } = item;
       let ipoint = new this.BMap.Point(longitude, latitude)
-    const opts = {
+      const opts = {
       position: ipoint,    // 指定文本标注所在的地理位置
       offset: new this.BMap.Size(-50, -28)    //设置文本偏移量
     }
@@ -150,6 +162,7 @@ export default class Map extends Component {
     label.setStyle({
       border: 'none'
     });
+
     // 添加点击事件
     label.addEventListener('click',  (e) => {
       // 获取小区的信息请求
@@ -157,6 +170,7 @@ export default class Map extends Component {
       // 点击小区实现居中的效果
       this.moveToCenter(e)
     })
+
     this.map.addOverlay(label);
 
   }
