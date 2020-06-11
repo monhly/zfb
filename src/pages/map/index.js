@@ -2,10 +2,18 @@ import React, { Component } from 'react'
 import { NavBar, Icon } from 'antd-mobile';
 import { getCurrCity } from "../../utils/getCity"
 //导入axios请求
-import{getInitHouse} from"../../request/map"
+import { getInitHouse } from "../../request/map"
+import {getHouseList}from"../../request/house"
 // 导入样式
 import styles from"./index.module.css"
+import { baseurl } from '../../utils/axios';
+import HouseItem from '../../components/HouseItem';
 export default class Map extends Component {
+  state = {
+
+    list: [],//定义小区信息
+    isShowList:false
+  }
     componentDidMount () {
         this.init()
 
@@ -143,13 +151,65 @@ export default class Map extends Component {
       border: 'none'
     });
     // 添加点击事件
-    label.addEventListener('click', () => {
-      console.log('点击小区', value)
+    label.addEventListener('click',  () => {
+      // 获取小区的信息请求
+      this.getMsgOfHome(value)
+      this.setState({
+        isShowList:true
+      })
+      console.log(this);
+
     })
     this.map.addOverlay(label);
   }
+   // 渲染小区下房屋列表
+   renderHouseList = () => {
+    return (
+      <div
+        className={[
+          styles.houseList,
+          this.state.isShowList ? styles.show : ''
+        ].join(' ')}
+      >
+        <div className={styles.titleWrap}>
+          <h1 className={styles.listTitle}>房屋列表</h1>
+          <a className={styles.titleMore} href="/home/house">
+            更多房源
+    </a>
+        </div>
 
-    render () {
+        <div className={styles.houseItems}>
+          {/* 房屋结构 */}
+          {
+          this.state.list.map(item => (
+              <HouseItem
+                onClick={() => this.props.history.push(`/detail/${item.houseCode}`)}
+                key={item.houseCode}
+                src={baseurl + item.houseImg}
+                title={item.title}
+                desc={item.desc}
+                tags={item.tags}
+                price={item.price}
+              />
+            ))
+          }
+        </div>
+      </div>
+    )
+  }
+  //获取小区的详细信息
+ async getMsgOfHome (index) {
+   const { status, body } = await getHouseList(index)
+   if (status === 200) {
+     console.log(body);
+
+     this.setState({
+       list:body.list
+     })
+   }
+  }
+
+ render () {
         return (
             <div className="mapIndex">
                 {/* 头部导航栏 */}
@@ -159,7 +219,9 @@ export default class Map extends Component {
                 onLeftClick={() => this.props.history.go(-1)}
                 >地图找房</NavBar>
                 {/* 下方地图的渲染 */}
-               <div id="container"></div>
+            <div id="container"></div>
+            {/* 显示小区详情 */}
+            {this.renderHouseList()}
             </div>
         )
     }
