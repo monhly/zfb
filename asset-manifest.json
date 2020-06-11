@@ -1,26 +1,26 @@
 {
   "files": {
-    "main.css": "/monhly.gitee.io/reactdexuexi/static/css/main.f9325b93.chunk.css",
-    "main.js": "/monhly.gitee.io/reactdexuexi/static/js/main.70227df4.chunk.js",
-    "main.js.map": "/monhly.gitee.io/reactdexuexi/static/js/main.70227df4.chunk.js.map",
-    "runtime-main.js": "/monhly.gitee.io/reactdexuexi/static/js/runtime-main.3b621e82.js",
-    "runtime-main.js.map": "/monhly.gitee.io/reactdexuexi/static/js/runtime-main.3b621e82.js.map",
-    "static/css/2.4dc16c59.chunk.css": "/monhly.gitee.io/reactdexuexi/static/css/2.4dc16c59.chunk.css",
-    "static/js/2.dbf6d6cf.chunk.js": "/monhly.gitee.io/reactdexuexi/static/js/2.dbf6d6cf.chunk.js",
-    "static/js/2.dbf6d6cf.chunk.js.map": "/monhly.gitee.io/reactdexuexi/static/js/2.dbf6d6cf.chunk.js.map",
-    "index.html": "/monhly.gitee.io/reactdexuexi/index.html",
-    "precache-manifest.b1293177cebbd8eed788518e43a5d43f.js": "/monhly.gitee.io/reactdexuexi/precache-manifest.b1293177cebbd8eed788518e43a5d43f.js",
-    "service-worker.js": "/monhly.gitee.io/reactdexuexi/service-worker.js",
-    "static/css/2.4dc16c59.chunk.css.map": "/monhly.gitee.io/reactdexuexi/static/css/2.4dc16c59.chunk.css.map",
-    "static/css/main.f9325b93.chunk.css.map": "/monhly.gitee.io/reactdexuexi/static/css/main.f9325b93.chunk.css.map",
-    "static/js/2.dbf6d6cf.chunk.js.LICENSE.txt": "/monhly.gitee.io/reactdexuexi/static/js/2.dbf6d6cf.chunk.js.LICENSE.txt",
-    "static/media/iconfont.css": "/monhly.gitee.io/reactdexuexi/static/media/iconfont.f58b610e.woff"
+    "main.css": "/monhly/reactdexuexi/static/css/main.97791f25.chunk.css",
+    "main.js": "/monhly/reactdexuexi/static/js/main.37562457.chunk.js",
+    "main.js.map": "/monhly/reactdexuexi/static/js/main.37562457.chunk.js.map",
+    "runtime-main.js": "/monhly/reactdexuexi/static/js/runtime-main.8f836d71.js",
+    "runtime-main.js.map": "/monhly/reactdexuexi/static/js/runtime-main.8f836d71.js.map",
+    "static/css/2.4dc16c59.chunk.css": "/monhly/reactdexuexi/static/css/2.4dc16c59.chunk.css",
+    "static/js/2.dbf6d6cf.chunk.js": "/monhly/reactdexuexi/static/js/2.dbf6d6cf.chunk.js",
+    "static/js/2.dbf6d6cf.chunk.js.map": "/monhly/reactdexuexi/static/js/2.dbf6d6cf.chunk.js.map",
+    "index.html": "/monhly/reactdexuexi/index.html",
+    "precache-manifest.28530075fb496c219b93a9758f3872a7.js": "/monhly/reactdexuexi/precache-manifest.28530075fb496c219b93a9758f3872a7.js",
+    "service-worker.js": "/monhly/reactdexuexi/service-worker.js",
+    "static/css/2.4dc16c59.chunk.css.map": "/monhly/reactdexuexi/static/css/2.4dc16c59.chunk.css.map",
+    "static/css/main.97791f25.chunk.css.map": "/monhly/reactdexuexi/static/css/main.97791f25.chunk.css.map",
+    "static/js/2.dbf6d6cf.chunk.js.LICENSE.txt": "/monhly/reactdexuexi/static/js/2.dbf6d6cf.chunk.js.LICENSE.txt",
+    "static/media/iconfont.css": "/monhly/reactdexuexi/static/media/iconfont.f58b610e.woff"
   },
   "entrypoints": [
-    "static/js/runtime-main.3b621e82.js",
+    "static/js/runtime-main.8f836d71.js",
     "static/css/2.4dc16c59.chunk.css",
     "static/js/2.dbf6d6cf.chunk.js",
-    "static/css/main.f9325b93.chunk.css",
-    "static/js/main.70227df4.chunk.js"
+    "static/css/main.97791f25.chunk.css",
+    "static/js/main.37562457.chunk.js"
   ]
 }
